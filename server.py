@@ -1,42 +1,33 @@
-import asyncio
-import aiohttp
 import os
+from openai import OpenAI
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
+import asyncio
 
-# 🔑 Токены из переменных окружения (RailWay → Settings → Variables)
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
 bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher()
 
-# Функция запроса к DeepSeek API
-async def ask_deepseek(prompt: str) -> str:
-    url = "https://api.deepseek.com/v1/chat/completions"
-    headers = {"Authorization": f"Bearer {DEEPSEEK_API_KEY}"}
-    payload = {
-        "model": "deepseek-chat",
-        "messages": [{"role": "user", "content": prompt}]
-    }
-    async with aiohttp.ClientSession() as session:
-        async with session.post(url, headers=headers, json=payload) as resp:
-            data = await resp.json()
-            choice = data["choices"][0]
-            # Универсальный парсер: поддержка разных форматов
-            return choice.get("message", {}).get("content") or choice.get("text", "")
+# Клиент DeepSeek
+client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url="https://api.deepseek.com")
 
-# Команда /start
+async def ask_deepseek(prompt: str) -> str:
+    resp = client.chat.completions.create(
+        model="deepseek-chat",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return resp.choices[0].message.content
+
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    await message.answer("Привет! Я CodeTutorDevBot. Напиши мне код или вопрос — и я помогу разобраться.")
+    await message.answer("Привет! Я CodeTutorDevBot. Напиши мне вопрос.")
 
-# Обработка любых сообщений
 @dp.message()
 async def handle_message(message: types.Message):
-    user_text = message.text
-    ai_reply = await ask_deepseek(user_text)
-    await message.answer(ai_reply)
+    reply = await asyncio.to_thread(ask_deepseek, message.text)
+    await message.answer(reply)
 
 async def main():
     await dp.start_polling(bot)
