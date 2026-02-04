@@ -3,7 +3,7 @@ import aiohttp
 import os
 from aiogram import Bot, Dispatcher, types
 
-# 🔑 Берём токены из переменных окружения
+# Берём токены из переменных окружения (RailWay → Settings → Variables)
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
