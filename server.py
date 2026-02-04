@@ -4,7 +4,7 @@ import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 
-# 🔑 Токены из переменных окружения
+# 🔑 Токены из переменных окружения (RailWay → Settings → Variables)
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
@@ -22,7 +22,9 @@ async def ask_deepseek(prompt: str) -> str:
     async with aiohttp.ClientSession() as session:
         async with session.post(url, headers=headers, json=payload) as resp:
             data = await resp.json()
-            return data["choices"][0]["message"]["content"]
+            choice = data["choices"][0]
+            # Универсальный парсер: поддержка разных форматов
+            return choice.get("message", {}).get("content") or choice.get("text", "")
 
 # Команда /start
 @dp.message(Command("start"))
