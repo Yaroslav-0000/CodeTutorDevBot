@@ -2,8 +2,9 @@ import asyncio
 import aiohttp
 import os
 from aiogram import Bot, Dispatcher, types
+from aiogram.filters import Command
 
-# Берём токены из переменных окружения (RailWay → Settings → Variables)
+# 🔑 Токены из переменных окружения
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
@@ -23,7 +24,12 @@ async def ask_deepseek(prompt: str) -> str:
             data = await resp.json()
             return data["choices"][0]["message"]["content"]
 
-# Обработчик сообщений
+# Команда /start
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    await message.answer("Привет! Я CodeTutorDevBot. Напиши мне код или вопрос — и я помогу разобраться.")
+
+# Обработка любых сообщений
 @dp.message()
 async def handle_message(message: types.Message):
     user_text = message.text
