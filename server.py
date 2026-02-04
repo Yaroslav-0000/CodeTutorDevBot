@@ -1,32 +1,19 @@
-import os
-from openai import OpenAI
+from transformers import pipeline
 from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command
-import asyncio
+import asyncio, os
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
-DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
 bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher()
 
-# Клиент DeepSeek
-client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url="https://api.deepseek.com")
-
-async def ask_deepseek(prompt: str) -> str:
-    resp = client.chat.completions.create(
-        model="deepseek-chat",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return resp.choices[0].message.content
-
-@dp.message(Command("start"))
-async def cmd_start(message: types.Message):
-    await message.answer("Привет! Я CodeTutorDevBot. Напиши мне вопрос.")
+# Загружаем локальную модель (например, GPT-2 small)
+generator = pipeline("text-generation", model="gpt2")
 
 @dp.message()
 async def handle_message(message: types.Message):
-    reply = await asyncio.to_thread(ask_deepseek, message.text)
+    user_text = message.text
+    reply = generator(user_text, max_length=50, num_return_sequences=1)[0]["generated_text"]
     await message.answer(reply)
 
 async def main():
