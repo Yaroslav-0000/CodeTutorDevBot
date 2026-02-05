@@ -12,7 +12,7 @@ dp = Dispatcher()
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer("""
-Я бот созданный для обучения программированию, вот что я вам могу предложу:
+Я бот созданный для обучения программированию, вот что я вам могу предложить:
 
 python⬇️
 написать текст /exemple_python_print
