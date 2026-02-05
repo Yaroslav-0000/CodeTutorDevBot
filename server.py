@@ -15,7 +15,11 @@ async def cmd_start(message: types.Message):
 Я бот созданный для обучения программированию, вот что я вам могу предложить:
 
 python⬇️
-написать текст /exemple_python_print
+вывод текста в консоль /exemple_python_print
+
+задание функции /exemple_python_setfunction
+
+выполнение функции по имени /exemple_python_runfunction
 ──────────────
 html⬇️
 пример базового кода /exemple_html_exemple
@@ -25,6 +29,18 @@ html⬇️
 async def cmd_exemple_python_print(message: types.Message):
     await message.answer(
         "```python\nprint('text')\n```",
+        parse_mode="MarkdownV2"
+    )
+@dp.message(Command("exemple_python_setfunction"))
+async def cmd_exemple_python_setfunction(message: types.Message):
+    await message.answer(
+        "```python\ndef test():\n    print('text')\n```",
+        parse_mode="MarkdownV2"
+    )
+@dp.message(Command("exemple_python_runfunction"))
+async def cmd_exemple_python_setfunction(message: types.Message):
+    await message.answer(
+        "```python\ntest()\n```",
         parse_mode="MarkdownV2"
     )
 
