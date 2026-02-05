@@ -12,15 +12,26 @@ dp = Dispatcher()
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer("""
-Привет, я бот созданный для обучения программированию, вот что вам я предложу:
+Я бот созданный для обучения программированию, вот что я вам могу предложу:
 
-написать текст /exemple_print
+python⬇️
+написать текст /exemple_python_print
+──────────────
+html⬇️
+пример базового кода /exemple_html_exemple
 """)
 
-@dp.message(Command("exemple_print"))
-async def cmd_exemple_print(message: types.Message):
+@dp.message(Command("exemple_python_print"))
+async def cmd_exemple_python_print(message: types.Message):
     await message.answer(
-        "```python\nprint('Hello, world!')\n```",
+        "```python\nprint('text')\n```",
+        parse_mode="MarkdownV2"
+    )
+
+@dp.message(Command("exemple_html_exemple"))
+async def cmd_exemple_html_exemple(message: types.Message):
+    await message.answer(
+        "```html\g\n```",
         parse_mode="MarkdownV2"
     )
 
