@@ -31,9 +31,9 @@ async def cmd_exemple_python_print(message: types.Message):
 @dp.message(Command("exemple_html_exemple"))
 async def cmd_exemple_html_exemple(message: types.Message):
     await message.answer(
-        "```html\g\n```",
-        parse_mode="MarkdownV2"
-    )
+    "```html\n<!DOCTYPE html>\n<html>\n<head>\n    <title>Пример</title>\n</head>\n<body>\n</body>\n</html>\n```",
+    parse_mode="MarkdownV2"
+)
 
 @dp.message()
 async def handle_message(message: types.Message):
