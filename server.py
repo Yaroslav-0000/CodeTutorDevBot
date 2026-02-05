@@ -18,7 +18,7 @@ async def cmd_start(message: types.Message):
 """)
 
 @dp.message(Command("exemple_print"))
-async def cmd_exemple_print(message: types.Message)
+async def cmd_exemple_print(message: types.Message):
     await message.answer('"print("text")"')
 
 @dp.message()
