@@ -19,7 +19,10 @@ async def cmd_start(message: types.Message):
 
 @dp.message(Command("exemple_print"))
 async def cmd_exemple_print(message: types.Message):
-    await message.answer('"print("text")"')
+    await message.answer(
+        "```python\nprint('Hello, world!')\n```",
+        parse_mode="MarkdownV2"
+    )
 
 @dp.message()
 async def handle_message(message: types.Message):
